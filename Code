@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+bool isValidSudoku(vector<vector<char>>& board, int i, int j, char ch) {
+        for(int k = 0; k < 9; k++) {
+            if(board[i][k] == ch) {
+                return false;
+            }
+        }
+        for(int k = 0; k < 9; k++) {
+            if(board[k][j] == ch) {
+                return false;
+            }
+        }
+        int upper_row = 3*(i/3), upper_col = 3*(j/3);
+        for(int k = 0; k < 9; k++) {
+            if(board[upper_row + k/3][upper_col + k%3] == ch) {
+                return false;
+            }
+        }
+        return true;
+}
+    
+bool backtracking(vector<vector<char>>& board){
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                if(board[i][j] == '0'){
+                    for(char k = '1'; k <= '9'; k++){
+                        if(isValidSudoku(board, i, j, k)){
+                            board[i][j] = k;
+                            if(backtracking(board)) return true;
+                            else board[i][j] = '0';
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+void solveSudoku(vector<vector<char>>& board){
+	    cout<<endl;
+        backtracking(board);
+    }
+
+int main(){
+	vector<vector<char>> board;
+	for(int i=0; i<9; i++){
+		vector <char> temp;
+		for(int j=0; j<9; j++){
+			char x; cin>>x;
+			temp.push_back(x);
+		}
+		board.push_back(temp);
+	}
+	
+	solveSudoku(board);
+	
+	for(int i=0; i<9; i++){
+		for(int j=0; j<9; j++){
+			cout<<board[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+}
